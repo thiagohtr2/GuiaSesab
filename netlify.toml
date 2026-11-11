@@ -1,0 +1,10 @@
+# O site é servido direto da raiz: não há etapa de build.
+[build]
+  publish = "."
+  command = ""
+
+# A página de administração não deve ser indexada por buscadores.
+[[headers]]
+  for = "/admin.html"
+  [headers.values]
+    X-Robots-Tag = "noindex, nofollow"

@@ -1,0 +1,4 @@
+# arquivos de trabalho que não fazem parte do site
+*.zip
+TESTE_*.pdf
+.DS_Store
