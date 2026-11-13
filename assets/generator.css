@@ -183,3 +183,18 @@ body.gs-wizard{
  .gs-wizard .gs-wizard-footer{margin:6px auto max(6px,env(safe-area-inset-bottom))}
 }
 @media(max-width:390px){.gs-wizard .gs-progress span{font-size:10px}.gs-wizard .generator-data input{font-size:14px}}
+
+
+/* Form alignment correction: keep all fields grouped from top, no vertical stretching */
+.gs-wizard .generator-data .sec-body{display:block!important;align-items:initial!important;justify-content:initial!important}
+.gs-wizard .generator-data .sec-body>.grid2{display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr))!important;align-content:start!important;align-items:start!important;gap:10px 12px!important;margin:0!important;width:100%}
+.gs-wizard .generator-data .grid2>div{min-width:0;align-self:start;margin:0!important;padding:0!important}
+.gs-wizard .generator-data .grid2>div.full{grid-column:1/-1!important}
+.gs-wizard .generator-data label{display:block;margin:0 0 4px!important;line-height:1.25;font-size:12px}
+.gs-wizard .generator-data input{display:block;width:100%;margin:0!important;height:42px!important;min-height:42px!important;box-sizing:border-box}
+.gs-wizard .generator-data .sec-head{margin:0!important}
+@media(max-height:720px){
+ .gs-wizard .generator-data .sec-body>.grid2{gap:7px 10px!important}
+ .gs-wizard .generator-data input{height:38px!important;min-height:38px!important}
+ .gs-wizard .generator-data label{font-size:11px;margin-bottom:3px!important}
+}
