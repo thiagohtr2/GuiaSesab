@@ -112,3 +112,74 @@ body.gs-wizard{height:100dvh;max-height:100dvh;overflow:hidden;padding:0!importa
 .gs-wizard .gs-finish-button{min-height:44px}
 @media(max-height:720px){.gs-wizard .generator-data input{height:35px!important;min-height:35px!important}.gs-wizard .generator-data .grid2{gap:5px 8px}.gs-wizard .day{height:clamp(27px,4.7dvh,38px)}.gs-wizard .gs-progress span{padding:5px 2px}.gs-wizard-header{margin-bottom:5px}}
 @media(max-width:390px){.gs-wizard>main.wrap{padding:0 9px!important}.gs-wizard .generator-data input{font-size:13px}.gs-wizard .gs-view-buttons button{font-size:10px}}
+
+
+/* GuiaSesab design system — clean clinical blue, compact and accessible */
+body.gs-wizard{
+ --ink:#172b4d;--paper:#f3f6fb;--card:#fff;--rule:#dce4ef;
+ --pine:#2563eb;--pine-soft:#eff6ff;--night:#234e91;
+ --sand:#dbeafe;--muted:#64748b;
+ background:#f3f6fb;color:#172b4d;font-family:"IBM Plex Sans",system-ui,sans-serif;
+}
+.gs-wizard .gs-wizard-header{padding-top:10px;margin-bottom:10px}
+.gs-wizard .gs-wizard-brand{font-size:17px;letter-spacing:-.5px;color:#17438a;font-weight:700;margin-bottom:11px}
+.gs-wizard .gs-header-account{color:#1d4ed8;background:#fff;border:1px solid #d7e3f5;border-radius:10px;font-size:12px;font-weight:600;padding:8px 12px}
+.gs-wizard .gs-progress{gap:7px}
+.gs-wizard .gs-progress span{background:#e8edf5;color:#6b7890;border-radius:8px;font-size:11px;padding:8px 3px}
+.gs-wizard .gs-progress span.active{background:#2563eb;color:#fff;box-shadow:0 2px 6px rgba(37,99,235,.14)}
+.gs-wizard .gs-progress span.done{background:#dbeafe;color:#1d4ed8}
+.gs-wizard .generator-columns>section.gs-step-current{background:#fff;border:1px solid #dce4ef;border-radius:14px;box-shadow:0 2px 12px rgba(26,57,98,.035)}
+.gs-wizard .generator-columns>section.gs-step-current>.sec-head{border-bottom:1px solid #e7edf5;padding:13px 16px!important}
+.gs-wizard .generator-columns>section.gs-step-current>.sec-head h2{font-size:17px;font-weight:700;letter-spacing:-.35px;color:#1e3555}
+.gs-wizard .generator-columns>section.gs-step-current>.sec-body{padding:14px 16px!important}
+.gs-wizard .generator-data label{color:#50637d;font-size:12px;font-weight:600;margin-bottom:5px}
+.gs-wizard .generator-data input,.gs-wizard select,.gs-wizard input[type=number]{
+ border:1px solid #d6e0ed;background:#fff;border-radius:9px;color:#1e3555;
+ font-family:inherit;box-shadow:none;
+}
+.gs-wizard .generator-data input{height:44px!important;min-height:44px!important;padding:9px 11px;font-size:15px}
+.gs-wizard input:focus,.gs-wizard select:focus,.gs-wizard button:focus-visible,.gs-wizard a:focus-visible{outline:2px solid #3b82f6;outline-offset:2px;border-color:#3b82f6}
+.gs-wizard input::placeholder{color:#9aa8ba}
+.gs-wizard .generator-data .grid2{gap:12px 12px}
+.gs-wizard .gs-wizard-footer{margin:10px auto max(10px,env(safe-area-inset-bottom))}
+.gs-wizard .gs-wizard-footer button{border-radius:11px;min-height:49px;font-size:14px;font-weight:700;padding:11px 18px}
+.gs-wizard .gs-wizard-footer .gs-next,.gs-wizard .gs-finish-button{background:#2563eb;border-color:#2563eb;color:#fff}
+.gs-wizard .gs-wizard-footer .gs-next:hover,.gs-wizard .gs-finish-button:hover{background:#1d4ed8;border-color:#1d4ed8}
+.gs-wizard .gs-wizard-footer .gs-back{background:#fff;border:1px solid #d6e0ed;color:#36506d}
+.gs-wizard .gs-view-switch{background:#f5f8fe;border:1px solid #e1e9f5;border-radius:11px;padding:7px;margin:9px 0}
+.gs-wizard .gs-view-buttons button{background:#fff;border:1px solid #dce5f2;color:#536a88;border-radius:8px;font-size:12px;font-weight:600;min-height:40px}
+.gs-wizard .gs-view-buttons button.active{background:#2563eb;border-color:#2563eb;color:#fff}
+.gs-wizard .aba{background:#fff;border:1px solid #dce5f2;border-radius:8px;color:#64748b;font-weight:600}
+.gs-wizard .aba.ativa{background:#2563eb;border-color:#2563eb;color:#fff}
+.gs-wizard .dica,.gs-wizard .gs-simple-help{background:#eff6ff;color:#31577e;border:0;border-radius:9px;line-height:1.45}
+.gs-wizard .day{border:1px solid #dce5f1;border-radius:8px;background:#fff;color:#263e5b;font-weight:500}
+.gs-wizard .day.pad{background:#f4f6fa;color:#a1afc1}
+.gs-wizard .day[data-t="D"],.gs-wizard .day[data-t="4M"],.gs-wizard .day[data-t="6M"]{background:#dbeafe;border-color:#93c5fd;color:#17438a}
+.gs-wizard .day[data-t="N"],.gs-wizard .day[data-t="4T"],.gs-wizard .day[data-t="6T"]{background:#234e91;border-color:#234e91;color:white}
+.gs-wizard .day[data-t="DN"]{background:#dbeafe;border-color:#234e91}
+.gs-wizard .day[data-t="DN"]::after{background:linear-gradient(to bottom right,transparent 49.5%,#234e91 50%)}
+.gs-wizard .legend{color:#667b95}
+.gs-wizard .sw-d{background:#dbeafe;border-color:#93c5fd}
+.gs-wizard .sw-n{background:#234e91;border-color:#234e91}
+.gs-wizard .sw-dn{background:linear-gradient(to bottom right,#dbeafe 49.5%,#234e91 50%)}
+.gs-wizard .semanas{background:#f7f9fd;border:1px solid #e1e8f3;border-radius:9px;color:#3d526e}
+.gs-wizard .gs-shift-button{background:#fff;color:#385674;border:1px solid #d5e0ee;border-radius:10px;font-size:14px}
+.gs-wizard .gs-shift-button.selected{background:#dbeafe;border:2px solid #2563eb;color:#17438a}
+.gs-wizard .gs-week-nav button{background:#fff;color:#1d4ed8;border:1px solid #d6e0ed;border-radius:9px}
+.gs-wizard .gs-final-options>a,.gs-wizard .gs-final-options>button{border:1px solid #d9e4f2;border-radius:12px;background:#fff;color:#1d4ed8;font-size:15px}
+.gs-wizard .gs-final-options>a:hover,.gs-wizard .gs-final-options>button:hover{background:#eff6ff;border-color:#93c5fd}
+.gs-wizard .gs-final-options small{color:#60748e}
+.gs-wizard .gs-finish-link{color:#1d4ed8}
+.gs-wizard .gs-compact-status{background:#eff6ff!important;color:#28578a!important;border:1px solid #d5e5fa!important;border-radius:9px!important}
+.gs-wizard .gs-compact-status a{color:#1d4ed8!important}
+@media(max-height:720px){
+ .gs-wizard .gs-wizard-header{padding-top:6px;margin-bottom:6px}
+ .gs-wizard .gs-wizard-brand{margin-bottom:6px}
+ .gs-wizard .gs-progress span{padding:5px 2px}
+ .gs-wizard .generator-data .grid2{gap:6px 9px}
+ .gs-wizard .generator-data input{height:37px!important;min-height:37px!important}
+ .gs-wizard .generator-columns>section.gs-step-current>.sec-head{padding:8px 12px!important}
+ .gs-wizard .generator-columns>section.gs-step-current>.sec-body{padding:9px 12px!important}
+ .gs-wizard .gs-wizard-footer{margin:6px auto max(6px,env(safe-area-inset-bottom))}
+}
+@media(max-width:390px){.gs-wizard .gs-progress span{font-size:10px}.gs-wizard .generator-data input{font-size:14px}}
