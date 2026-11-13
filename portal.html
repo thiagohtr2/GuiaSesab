@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow"><meta name="referrer" content="same-origin">
+<title>Portal da equipe · GuiaSesab</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/portal.css">
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/pdf-lib/1.17.1/pdf-lib.min.js"></script>
+<script type="module" src="assets/portal.js"></script>
+</head>
+<body>
+<a class="skip" href="#main">Pular para o conteúdo</a>
+<header class="topbar"><a class="brand" href="index.html"><span class="brand-symbol" aria-hidden="true">G</span><span>Guia<span class="brand-light">Sesab</span><small>GESTÃO DE GUIAS MÉDICAS</small></span></a><div class="top-actions"><a class="quiet-link" href="index.html">Gerar minha guia →</a><span id="identity"></span><button id="logout" hidden>Sair</button></div></header>
+<div id="loading" class="boot" role="status">Carregando o portal…</div>
+<div id="auth" class="auth-layout" hidden>
+  <div class="auth-intro"><span class="eyebrow">MENOS PENDÊNCIAS. MAIS CLAREZA.</span><h1>As guias da equipe.<br>Todo o mês, em dia.</h1><p>Da marcação dos plantões à entrega da guia assinada. Um lugar para acompanhar cada etapa.</p><div class="auth-route"><span>01 <b>Gere sua guia</b></span><span>02 <b>Assine pelo gov.br</b></span><span>03 <b>Anexe e acompanhe</b></span></div><a href="index.html">Continuar para o gerador de guias →</a></div>
+  <section class="auth-card"><div class="eyebrow">PORTAL DA EQUIPE</div><h2 id="auth-title">Bom ter você por aqui.</h2><p id="auth-copy" class="muted">Entre para acompanhar as guias da sua unidade.</p><div class="segmented" id="auth-tabs"><button data-auth="login" class="active">Entrar</button><button data-auth="signup">Criar conta</button></div>
+    <form id="auth-form"><div id="signup-name" hidden><label for="auth-name">Nome completo</label><input id="auth-name" maxlength="120" autocomplete="name"></div><label for="auth-email">E-mail</label><input id="auth-email" type="email" required autocomplete="username"><label for="auth-password">Senha</label><input id="auth-password" type="password" required minlength="1" autocomplete="current-password"><div id="reset-confirm" hidden><label for="auth-password-confirm">Repita a nova senha</label><input id="auth-password-confirm" type="password" minlength="8" autocomplete="new-password"></div><p class="field-hint" id="password-help" hidden>Use pelo menos 8 caracteres. Você confirmará o cadastro por e-mail, se essa proteção estiver habilitada.</p><button class="primary wide" id="auth-submit">Entrar na minha conta →</button><button type="button" class="text-button" id="forgot">Esqueci minha senha</button><p id="auth-message" role="status"></p></form>
+    <p class="privacy-note">O painel de acompanhamento é compartilhado com as contas autenticadas. E-mails e PDFs assinados têm acesso restrito. O anexo recebido não representa validação da assinatura.</p>
+  </section>
+</div>
+<div id="app" class="app-shell" hidden>
+<aside class="sidebar"><div class="eyebrow">ESPAÇO DA EQUIPE</div><nav aria-label="Navegação principal"><button data-view="dashboard" class="nav-item active"><span aria-hidden="true">▦</span> Visão geral</button><button data-view="mine" class="nav-item"><span aria-hidden="true">▤</span> Minha guia</button><button data-view="account" class="nav-item"><span aria-hidden="true">◎</span> Minha conta</button><button data-view="manage" class="nav-item admin-only" hidden><span aria-hidden="true">⚙</span> Administração</button></nav><div class="sidebar-note"><span class="small-dot"></span><strong>Um fluxo conhecido.</strong><p>O calendário e a geração do PDF continuam como você já usa.</p><a href="index.html">Abrir gerador →</a></div></aside>
+<main id="main" class="main"><div id="global-message" class="notice" role="status" hidden></div>
+<div class="page-heading"><div><span class="eyebrow" id="page-eyebrow">ACOMPANHAMENTO MENSAL</span><h1 id="page-title">Visão geral</h1><p class="muted" id="page-description">Cada médico, cada etapa. Tudo em um só lugar.</p></div><a class="primary button" href="index.html">+ Gerar minha guia</a></div>
+<div class="filters"><div><label for="reference">Mês de referência</label><input id="reference" type="month" min="2020-01" max="2100-12" required></div><div><label for="unit-filter">Unidade</label><select id="unit-filter"><option value="">Todas as unidades</option></select></div><button id="refresh" class="filter-refresh">↻ Atualizar</button></div>
+<div id="view-dashboard">
+<div id="deadline-banner" class="deadline-banner"></div>
+<div class="metrics" id="metrics"></div>
+<section class="panel"><div class="panel-heading"><div><h2>Equipe e entregas</h2><p class="muted">As etapas e suas datas ficam visíveis para toda a equipe.</p></div><div class="table-tools"><label class="sr-only" for="search">Buscar médico</label><input id="search" type="search" placeholder="Buscar médico…"><label class="sr-only" for="status-filter">Filtrar etapa</label><select id="status-filter"><option value="all">Todas as etapas</option><option value="pending">Sem anexo assinado</option><option value="ready">Aguardando impressão</option><option value="printed">Aguardando envio</option><option value="sent">Enviadas</option></select></div></div>
+<div class="table-scroll"><table><caption class="sr-only">Acompanhamento das guias por médico</caption><thead><tr><th scope="col">Médico / unidade</th><th scope="col">Guia gerada</th><th scope="col">Anexo assinado</th><th scope="col">Impressão</th><th scope="col">Envio</th><th scope="col">Situação</th></tr></thead><tbody id="team-body"></tbody></table></div><div id="table-footer" class="panel-footer"></div></section>
+<p class="footnote">As datas de impressão e envio são confirmações registradas pela administração. O recebimento de um PDF não valida sua assinatura digital.</p>
+</div>
+<div id="view-mine" hidden><div id="my-guide"></div></div>
+<div id="view-account" hidden>
+<section class="panel narrow"><div class="panel-heading"><h2>Seu cadastro profissional</h2></div><form id="profile-form" class="panel-body form-grid"><div class="span2"><label for="profile-name">Nome completo</label><input id="profile-name" required minlength="2" maxlength="120" autocomplete="name"></div><div><label for="profile-crm">CRM / conselho</label><input id="profile-crm" maxlength="40" required></div><div><label for="profile-rqe">RQE</label><input id="profile-rqe" maxlength="40"></div><div class="span2"><label for="profile-specialty">Especialidade</label><input id="profile-specialty" value="ANESTESIOLOGIA" maxlength="80"></div><div class="span2"><button class="primary">Salvar meu cadastro</button></div></form></section>
+<section class="panel narrow"><div class="panel-heading"><h2>Sua unidade</h2></div><div class="panel-body"><p id="my-unit"></p><form id="request-form" class="form-grid"><div><label for="request-unit">Solicitar vínculo</label><select id="request-unit" required></select></div><button class="primary align-end">Solicitar entrada</button></form><div id="my-requests" class="muted"></div></div></section>
+<section class="panel narrow"><div class="panel-heading"><h2>Alterar senha</h2></div><form id="password-form" class="panel-body"><label for="new-password">Nova senha</label><input id="new-password" type="password" minlength="8" required autocomplete="new-password"><label for="repeat-password">Repita a nova senha</label><input id="repeat-password" type="password" minlength="8" required autocomplete="new-password"><p class="field-hint">Sua conta é gerenciada pelo Netlify Identity e utilizada no portal GuiaSesab.</p><button class="primary">Salvar senha</button></form></section>
+</div>
+<div id="view-manage" hidden>
+<div class="manage-grid"><section class="panel"><div class="panel-heading"><h2>Prazo de entrega</h2></div><form id="deadline-form" class="panel-body"><p class="muted">Defina o limite para anexar a guia assinada no mês e na unidade selecionados acima.</p><label for="deadline">Data limite · horário de Salvador</label><input id="deadline" type="date" required><button class="primary">Salvar prazo</button></form></section>
+<section class="panel"><div class="panel-heading"><h2>Impressão em lote</h2></div><div class="panel-body"><p class="muted">Reúne os anexos da unidade e do mês selecionados. Escolha as guias na conferência abaixo. As folhas de relatório de horas ficam fora da cópia de impressão.</p><label class="check"><input id="only-unprinted" type="checkbox" checked> Apenas guias ainda não impressas</label><button class="primary" id="merge">Gerar PDF completo</button><div id="batch-result" role="status"></div><p class="field-hint">Os originais assinados são preservados. O PDF consolidado é uma cópia para impressão e não mantém a validação digital das assinaturas.</p></div></section></div>
+<section class="panel"><div class="panel-heading"><h2>Conferência e envio</h2><p class="muted">Abra o original, confira a assinatura e confirme o envio após a entrega.</p></div><div id="admin-guides" class="panel-body"></div></section>
+<section class="panel"><div class="panel-heading"><h2>Solicitações de entrada</h2></div><div id="requests" class="panel-body"></div></section>
+<section class="panel narrow"><div class="panel-heading"><h2>Criar unidade</h2></div><form id="unit-form" class="panel-body"><label for="unit-name">Nome da unidade</label><input id="unit-name" required minlength="2" maxlength="160"><label for="unit-company">Empresa</label><input id="unit-company" maxlength="80"><button class="primary">Criar unidade</button></form></section>
+<section class="panel master-only" hidden><div class="panel-heading"><div><h2>Contas e permissões</h2><p class="muted">Somente a conta master define administradores e altera diretamente os vínculos.</p></div></div><div id="users" class="panel-body"></div></section>
+<section class="panel"><div class="panel-heading"><h2>Histórico de operações</h2><p class="muted">Últimos 50 registros da unidade selecionada.</p></div><div id="events" class="panel-body"></div></section>
+</div>
+</main></div>
+<div id="toast" class="portal-toast" role="status" hidden></div>
+<dialog id="confirm-dialog"><form method="dialog"><h2 id="confirm-title">Confirmar alteração</h2><p id="confirm-copy"></p><div class="row"><button value="cancel">Cancelar</button><button class="primary" value="confirm">Confirmar</button></div></form></dialog>
+</body></html>

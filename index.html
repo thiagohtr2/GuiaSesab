@@ -1,6 +1,9 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Guias de plantão — HGRS</title>
+<title>Guias de plantão · GuiaSesab</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -117,17 +120,23 @@ a.btn-a:hover{background:#f0f1ed}
   max-width:88vw;text-align:center}
 @media (prefers-reduced-motion:reduce){*{transition:none!important}}
 </style>
+<link rel="stylesheet" href="assets/generator.css">
+<script src="assets/auth-redirect.js"></script>
+<script type="module" src="assets/generator-bridge.js"></script>
+</head>
+<body>
 
-<div class="masthead"><div class="wrap">
+<header class="masthead"><div class="wrap">
+  <div class="generator-top"><a class="generator-brand" href="index.html"><i aria-hidden="true">G</i><span>Guia<span>Sesab</span><small>GESTÃO DE GUIAS MÉDICAS</small></span></a><a class="portal-link" href="portal.html">Portal da equipe <span aria-hidden="true">→</span></a></div>
+  <div class="generator-eyebrow">SEUS PLANTÕES, NO FORMULÁRIO OFICIAL</div>
   <h1>Guias de plantão</h1>
-  <p>Preencha seus dados, marque os plantões do mês e baixe as guias já prontas no
-     formulário oficial da SESAB, com o relatório de horas na última folha.</p>
-  <div class="stamp">nada é gravado neste site · seus dados somem ao fechar a página</div>
-</div></div>
-
-<div class="wrap">
-
-<section>
+  <p>Preencha seus dados, marque os plantões do mês e baixe suas guias. O calendário e o PDF continuam do jeito que você já conhece.</p>
+  <div class="stamp">01 Marque os dias &nbsp; · &nbsp; 02 Gere o PDF &nbsp; · &nbsp; 03 Assine e anexe no portal</div>
+</div></header>
+<main class="wrap">
+<div id="portal-status" role="status" hidden></div>
+<div class="generator-columns">
+<section class="generator-data">
   <div class="sec-head"><h2>Seus dados</h2>
     <span class="hint">vão impressos na guia</span></div>
   <div class="sec-body">
@@ -186,6 +195,8 @@ a.btn-a:hover{background:#f0f1ed}
 </section>
 
 </div>
+<p class="generator-footer">Credenciamento nº 001/2024 · Portaria nº 921/2024 · As guias incluem o relatório de horas para conferência.</p>
+</main>
 
 <div class="bar"><div class="wrap">
   <div class="sum" id="resumo">Nenhum plantão marcado ainda.</div>
@@ -244,29 +255,10 @@ const SECOES = {
   procedimentos:  { cel:[567.5,578.1], b4:587.0, b6:597.4, area:[599.9,634.9] }
 };
 
-/* ===== registro de uso (chave publicável; o RLS só permite INSERT) ===== */
-const SUPA_URL = "https://kzjnyjqacqgecsogukiq.supabase.co";
-const SUPA_KEY = "sb_publishable_V9HCDIq873ev31v3fpYNrw_hTUp-0uP";
-
-function registrarUso(folhas, detalhe, totalHoras){
-  try{
-    fetch(SUPA_URL + "/rest/v1/guias_emitidas", {
-      method: "POST",
-      headers: { "apikey": SUPA_KEY, "Content-Type": "application/json", "Prefer": "return=minimal" },
-      body: JSON.stringify({
-        nome: (st.nome||"").trim().slice(0,120),
-        registro: (st.registro||"").trim().slice(0,40) || null,
-        rqe: (st.rqe||"").trim().slice(0,40) || null,
-        especialidade: (st.especialidade||"").trim().slice(0,80) || null,
-        unidade: (st.unidade||"").trim().slice(0,160) || null,
-        empresa: (st.empresa||"").trim().slice(0,80) || null,
-        mes: st.mes, ano: st.ano,
-        folhas: folhas, total_horas: totalHoras, detalhe: detalhe
-      }),
-      keepalive: true
-    }).catch(() => {});
-  }catch(e){ /* o registro jamais pode atrapalhar a emissão */ }
-}
+/* ===== registro de uso ===== */
+/* O acompanhamento autenticado é registrado pela integração Netlify após gerar o PDF.
+   O gerador público continua independente da disponibilidade do portal. */
+function registrarUso(){ /* compatibilidade com o fluxo original */ }
 
 /* horas por categoria e por período, para o registro */
 function resumoDeUso(){
@@ -503,7 +495,14 @@ function nomeArq(){
   return "Guia_"+base+"_"+pad(st.mes+1)+"-"+st.ano+".pdf";
 }
 
+let gerandoGuia = false;
 async function gerar(){
+  if(gerandoGuia) return;
+  gerandoGuia=true;
+  const controles=[...document.querySelectorAll("main input,main select,main button")].map(el=>[el,el.disabled]);
+  controles.forEach(([el])=>el.disabled=true);
+  try {
+  if(window.gsBeforeGenerate && !(await window.gsBeforeGenerate())) return;
   const folhas = semanas().length;
   if(!folhas){ toast("Marque ao menos um plantão."); return; }
   if(!st.nome.trim()){ toast("Preencha seu nome completo."); $("#f-nome").focus(); return; }
@@ -513,6 +512,7 @@ async function gerar(){
   try{
     limparBlobs();
     const bytes = await montarPdf();
+    const totalPaginas = (await PDFLib.PDFDocument.load(bytes)).getPageCount();
     const arquivo = nomeArq();
     const uso = resumoDeUso();
     registrarUso(folhas, { categorias: uso.categorias, periodos: uso.periodos }, uso.total);
@@ -524,7 +524,7 @@ async function gerar(){
     const li = document.createElement("div");
     li.className = "res";
     li.innerHTML = '<div class="res-nome">' + esc(st.nome) +
-      '<span class="res-pg">' + (folhas+1) + " páginas · " + esc(arquivo) + '</span></div>';
+      '<span class="res-pg">' + totalPaginas + " páginas · " + esc(arquivo) + '</span></div>';
     const bt = document.createElement("button");
     bt.className = "primary"; bt.textContent = "Salvar";
     bt.onclick = () => entregar(bytes, arquivo);
@@ -534,16 +534,19 @@ async function gerar(){
     acoes.className = "row"; acoes.appendChild(bt); acoes.appendChild(a);
     li.appendChild(acoes);
     corpo.appendChild(li);
+    const portalLink=document.createElement("a");portalLink.href="portal.html?view=mine";portalLink.className="result-portal";portalLink.textContent="Próxima etapa: assinar e anexar no portal →";corpo.appendChild(portalLink);
     $("#res-hint").textContent = folhas + (folhas===1?" guia":" guias") + " + relatório";
     $("#sec-res").style.display = "";
 
+    window.dispatchEvent(new CustomEvent("gs:generated", {detail:{name:st.nome,unit:st.unidade,reference:st.ano+"-"+pad(st.mes+1)+"-01",guidePages:folhas,totalPages:totalPaginas}}));
     const r = await entregar(bytes, arquivo);
-    if(r !== "cancelado") toast("PDF com " + (folhas+1) + " páginas.");
+    if(r !== "cancelado") toast("PDF com " + totalPaginas + " páginas.");
   } catch(e){
     console.error(e);
     toast("Não foi possível gerar: " + e.message);
   }
   btn.disabled = false; btn.textContent = "Baixar PDF"; resumo();
+  } finally { controles.forEach(([el,disabled])=>el.disabled=disabled);gerandoGuia=false;resumo(); }
 }
 
 /* ===================== geração do PDF ===================== */
@@ -849,3 +852,6 @@ $("#btn-gerar").onclick = gerar;
 
 pintaAbas(); pintaCalendario(); pintaSemanas(); resumo();
 </script>
+
+</body>
+</html>
