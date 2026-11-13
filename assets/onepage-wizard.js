@@ -8,6 +8,8 @@ if(data&&calendar&&results&&columns){
  const header=document.createElement('div');header.className='gs-wizard-header';
  header.innerHTML='<div class="gs-wizard-brand">GUIASESAB <span>· Guia de plantões</span></div><div class="gs-progress" aria-label="Progresso"><span>1 Dados</span><span>2 Plantões</span><span>3 Guia</span><span>4 Finalizar</span></div>';
  columns.before(header);
+ const portal=document.querySelector('#portal-status');if(portal){portal.classList.add('gs-compact-status');header.append(portal);}
+ const portalLink=document.createElement('a');portalLink.className='gs-header-account';portalLink.href='portal.html';portalLink.textContent='Minha conta ↗';header.querySelector('.gs-wizard-brand').append(portalLink);
  const footer=document.createElement('nav');footer.className='gs-wizard-footer';footer.setAttribute('aria-label','Navegação das etapas');
  const back=document.createElement('button');back.type='button';back.className='gs-back';back.textContent='‹ Voltar';
  const next=document.createElement('button');next.type='button';next.className='gs-next';next.textContent='Continuar ›';
@@ -22,8 +24,8 @@ if(data&&calendar&&results&&columns){
   steps.forEach((el,i)=>{el.classList.toggle('gs-step-current',i===step);el.hidden=i!==step;if(el===results)el.style.display=i===step?'block':'none';});
   header.querySelectorAll('.gs-progress span').forEach((el,i)=>{el.classList.toggle('active',i===step);el.classList.toggle('done',i<step);});
   back.hidden=step===0;next.hidden=step>=2;next.textContent=step===0?'Selecionar plantões ›':'Gerar minha guia ›';
-  document.querySelector('.bar')?.classList.toggle('gs-bar-visible',step===1);
-  window.scrollTo({top:0,behavior:'instant'});
+  document.querySelector('.bar')?.classList.remove('gs-bar-visible');
+  window.scrollTo(0,0);
  }
  back.addEventListener('click',()=>setStep(step-1));
  next.addEventListener('click',()=>{
