@@ -1,0 +1,50 @@
+/* GuiaSesab Design Tokens v1.0 — single source of truth */
+:root{
+ --gs-blue-50:#eff6ff;--gs-blue-100:#dbeafe;--gs-blue-200:#bfdbfe;--gs-blue-300:#93c5fd;
+ --gs-blue-400:#60a5fa;--gs-blue-500:#3b82f6;--gs-blue-600:#2563eb;--gs-blue-700:#1d4ed8;
+ --gs-blue-800:#1e40af;--gs-blue-900:#1e3a8a;
+ --gs-primary:var(--gs-blue-600);--gs-primary-hover:var(--gs-blue-700);--gs-primary-active:var(--gs-blue-800);
+ --gs-primary-soft:var(--gs-blue-50);--gs-primary-selected:var(--gs-blue-100);
+ --gs-bg:#f3f6fb;--gs-surface:#fff;--gs-surface-muted:#f8fafc;
+ --gs-text:#172b4d;--gs-text-secondary:#50637d;--gs-text-muted:#64748b;
+ --gs-border:#dce4ef;--gs-border-strong:#a8b8cc;--gs-placeholder:#94a3b8;
+ --gs-success:#16835d;--gs-success-soft:#e5f5ed;
+ --gs-warning:#b45309;--gs-warning-soft:#fff4df;
+ --gs-danger:#dc2626;--gs-danger-soft:#fef2f2;
+ --gs-info:#0284c7;--gs-info-soft:#e0f2fe;
+ --gs-disabled-bg:#e9eef5;--gs-disabled-text:#8796aa;
+ --gs-focus:#3b82f6;--gs-shadow:0 2px 12px rgba(26,57,98,.035);
+ --gs-radius-sm:6px;--gs-radius-md:9px;--gs-radius-lg:12px;--gs-radius-xl:14px;
+ --gs-space-1:4px;--gs-space-2:8px;--gs-space-3:12px;--gs-space-4:16px;--gs-space-5:20px;--gs-space-6:24px;
+ --gs-control-height:44px;--gs-action-height:48px;
+ --gs-font:"IBM Plex Sans",system-ui,-apple-system,sans-serif;
+}
+@media(prefers-color-scheme:dark){
+ :root[data-gs-theme="auto"]{
+ --gs-bg:#0e1728;--gs-surface:#172338;--gs-surface-muted:#1e2d45;
+ --gs-text:#e7eefb;--gs-text-secondary:#b5c4d9;--gs-text-muted:#a1b3cc;
+ --gs-border:#34445d;--gs-border-strong:#63738c;--gs-placeholder:#8496ae;
+ --gs-primary:#60a5fa;--gs-primary-hover:#93c5fd;--gs-primary-active:#bfdbfe;
+ --gs-primary-soft:#172e50;--gs-primary-selected:#203c64;
+ --gs-disabled-bg:#29374b;--gs-disabled-text:#8a9ab0;
+ --gs-shadow:0 2px 12px rgba(0,0,0,.12);
+ }
+}
+:root[data-gs-theme="dark"]{
+ --gs-bg:#0e1728;--gs-surface:#172338;--gs-surface-muted:#1e2d45;
+ --gs-text:#e7eefb;--gs-text-secondary:#b5c4d9;--gs-text-muted:#a1b3cc;
+ --gs-border:#34445d;--gs-border-strong:#63738c;--gs-placeholder:#8496ae;
+ --gs-primary:#60a5fa;--gs-primary-hover:#93c5fd;--gs-primary-active:#bfdbfe;
+ --gs-primary-soft:#172e50;--gs-primary-selected:#203c64;
+ --gs-disabled-bg:#29374b;--gs-disabled-text:#8a9ab0;
+ --gs-shadow:0 2px 12px rgba(0,0,0,.12);
+}
+/* Shared component contracts. Preserve existing page-specific dimensions. */
+.gs-button-primary{background:var(--gs-primary);color:#fff;border:1px solid var(--gs-primary);border-radius:var(--gs-radius-md);min-height:var(--gs-action-height);font-family:var(--gs-font);font-weight:600}
+.gs-button-primary:hover{background:var(--gs-primary-hover);border-color:var(--gs-primary-hover)}
+.gs-button-primary:active{background:var(--gs-primary-active)}
+.gs-button-primary:disabled{background:var(--gs-disabled-bg);border-color:var(--gs-border);color:var(--gs-disabled-text);cursor:not-allowed}
+.gs-field{background:var(--gs-surface);border:1px solid var(--gs-border);border-radius:var(--gs-radius-md);color:var(--gs-text);min-height:var(--gs-control-height);font:inherit}
+.gs-field::placeholder{color:var(--gs-placeholder)}
+.gs-field:focus-visible,.gs-button-primary:focus-visible{outline:2px solid var(--gs-focus);outline-offset:2px}
+.gs-card{background:var(--gs-surface);border:1px solid var(--gs-border);border-radius:var(--gs-radius-xl);box-shadow:var(--gs-shadow)}
