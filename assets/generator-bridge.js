@@ -1,3 +1,4 @@
+import './onepage-wizard.js';
 import './accessible-calendar.js';
 import * as api from './api.js';
 const status=document.querySelector('#portal-status');
