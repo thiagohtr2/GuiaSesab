@@ -19,7 +19,7 @@ if(data&&calendar&&results&&columns){
  const steps=[data,calendar,results,final];
  function setStep(n){
   step=Math.max(0,Math.min(3,n));
-  steps.forEach((el,i)=>{el.classList.toggle('gs-step-current',i===step);el.hidden=i!==step;});
+  steps.forEach((el,i)=>{el.classList.toggle('gs-step-current',i===step);el.hidden=i!==step;if(el===results)el.style.display=i===step?'block':'none';});
   header.querySelectorAll('.gs-progress span').forEach((el,i)=>{el.classList.toggle('active',i===step);el.classList.toggle('done',i<step);});
   back.hidden=step===0;next.hidden=step>=2;next.textContent=step===0?'Selecionar plantões ›':'Gerar minha guia ›';
   document.querySelector('.bar')?.classList.toggle('gs-bar-visible',step===1);
@@ -32,7 +32,5 @@ if(data&&calendar&&results&&columns){
  });
  window.addEventListener('gs:generated',()=>setStep(2));
  const finish=document.createElement('button');finish.type='button';finish.className='gs-next gs-finish-button';finish.textContent='Escolher assinatura e entrega ›';results.append(finish);finish.addEventListener('click',()=>setStep(3));
- const watch=new MutationObserver(()=>{if(step===2)results.hidden=false;});
- watch.observe(results,{attributes:true,attributeFilter:['style']});
  setStep(0);
 }
