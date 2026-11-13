@@ -7,14 +7,20 @@ if(cal){
  cal.parentElement.insertBefore(tabs,cal);
  const simple=document.createElement('div');simple.id='gs-simple-days';simple.className='gs-simple-days';simple.hidden=true;cal.insertAdjacentElement('afterend',simple);
  const help=document.createElement('p');help.className='gs-simple-help';help.textContent='Toque em Dia (SD) ou Noite (SN) para marcar ou desmarcar. Os plantões são os mesmos nas duas visualizações.';simple.before(help);help.hidden=true;
- let mode='calendar';let busy=false;
+ let mode='calendar';let busy=false;let week=0;
  const getDays=()=>[...cal.querySelectorAll('.day:not(.pad)')].filter(b=>b.querySelector('.n'));
  function update(){
   if(busy)return;
   const days=getDays();
   if(!days.length)return;
   const fragment=document.createDocumentFragment();
-  for(const original of days){
+  const pages=Math.ceil(days.length/7);week=Math.min(week,Math.max(0,pages-1));
+  const pager=document.createElement('div');pager.className='gs-week-nav';
+  const prev=document.createElement('button');prev.type='button';prev.textContent='‹ Anterior';prev.disabled=week===0;prev.onclick=()=>{week--;update();};
+  const title=document.createElement('strong');title.textContent='Dias '+(week*7+1)+'–'+Math.min(days.length,(week+1)*7);
+  const next=document.createElement('button');next.type='button';next.textContent='Próxima ›';next.disabled=week>=pages-1;next.onclick=()=>{week++;update();};
+  pager.append(prev,title,next);fragment.append(pager);
+  for(const original of days.slice(week*7,(week+1)*7)){
    const day=original.querySelector('.n')?.textContent?.trim();
    if(!day)continue;
    const state=original.dataset.t||'';
@@ -28,7 +34,6 @@ if(cal){
     btn.addEventListener('click',()=>{
      const current=original.dataset.t||'';
      const desired=kind==='D'?(current==='D'?'':current==='N'?'DN':current==='DN'?'N':'D'):(current==='N'?'':current==='D'?'DN':current==='DN'?'D':'N');
-     const sequence=['','D','N','DN'];
      // Use the original click handler, never modify its state or the PDF engine.
      busy=true;
      for(let i=0;i<4&&(original.dataset.t||'')!==desired;i++)original.click();
@@ -52,8 +57,8 @@ if(cal){
  tabs.addEventListener('click',e=>{const b=e.target.closest('button[data-mode]');if(b)show(b.dataset.mode);});
  const observer=new MutationObserver(()=>{if(mode==='simple')update();});
  observer.observe(cal,{subtree:true,childList:true,attributes:true,attributeFilter:['data-t']});
- document.querySelector('#f-mes')?.addEventListener('change',()=>queueMicrotask(update));
- document.querySelector('#f-ano')?.addEventListener('change',()=>queueMicrotask(update));
+ document.querySelector('#f-mes')?.addEventListener('change',()=>{week=0;queueMicrotask(update);});
+ document.querySelector('#f-ano')?.addEventListener('change',()=>{week=0;queueMicrotask(update);});
  document.querySelector('#abas')?.addEventListener('click',()=>{if(mode==='simple')requestAnimationFrame(update);});
  let saved='calendar';try{saved=localStorage.getItem('gs-calendar-view')||'calendar';}catch{}
  show(saved==='simple'?'simple':'calendar');
