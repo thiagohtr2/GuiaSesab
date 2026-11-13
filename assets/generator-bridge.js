@@ -1,3 +1,4 @@
+import './accessible-calendar.js';
 import * as api from './api.js';
 const status=document.querySelector('#portal-status');
 let profile=null,unit=null;
