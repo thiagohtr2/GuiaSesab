@@ -5,7 +5,8 @@
   "scripts": {
     "test": "node --test tests/*.test.mjs",
     "build": "node scripts/build.mjs",
-    "db:migrate": "node scripts/migrate.mjs"
+    "db:migrate": "node scripts/migrate.mjs",
+    "preview": "node scripts/preview.mjs"
   },
   "devDependencies": {
     "@electric-sql/pglite": "0.5.16"

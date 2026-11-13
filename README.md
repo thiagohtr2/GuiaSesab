@@ -7,7 +7,23 @@ Credenciamento nº 001/2024 · Portaria nº 921/2024.
 ## Telas
 
 - `index.html`: gerador público; clique repetido alterna SD, SN, SD+SN e vazio. As outras categorias mantêm 4M, 4T, 6M e 6T. A conta conectada é preenchida automaticamente e a emissão fica vinculada ao mês/unidade.
-- `portal.html`: entrar/cadastrar/recuperar senha; visão geral da equipe; minha guia; minha conta; administração por papel.
+- `portal.html`: entrar/cadastrar/recuperar senha; **Dashboard** da unidade; minha guia; minha conta; administração por papel.
+
+## Dashboard
+
+Mostra sempre **todos os médicos cadastrados na unidade** no mês escolhido (‹ › para trocar de mês). A conta master alterna entre unidades; as demais veem a própria.
+
+- Colunas: médico (CRM/RQE), situação, datas de emissão, entrega (PDF assinado anexado), impressão e envio, folhas e ação.
+- Situações: **Pendente** (com dias até o prazo), **Em atraso** (prazo vencido sem guia assinada), **Esperando impressão**, **Impressa** (falta confirmar envio) e **Concluída**. Entregas fora do prazo ficam marcadas com os dias de atraso.
+- Prazo: último dia do mês de referência, até 23h59 de Salvador, salvo outra data definida pela administração.
+- Indicadores, filtros por situação com contagem, busca por nome ou CRM e aviso de guias do mês anterior ainda sem entrega.
+- Administração da unidade: **Imprimir** cada guia (só as folhas oficiais, sem o relatório), **Marcar como impressa**, **Confirmar envio** e **Reimprimir**.
+- **Modo painel**: tela cheia para o computador do hospital (`portal.html?painel=1`), atualização automática a cada minuto.
+- Um médico só é cobrado nos meses cujo prazo é posterior ao seu cadastro.
+
+## Prévia local sem Netlify
+
+`npm run preview` sobe o portal em `http://localhost:8888/portal.html` com dados fictícios, usando o mesmo serviço da API sobre PostgreSQL em WASM. Troque de conta em `/__preview/as?u=1` (master), `u=2` (admin) e `u=3+` (médicos).
 - `admin.html`: entrada antiga, redireciona à administração do portal.
 - `assets/`: estilos responsivos, cliente da API, integração do gerador e consolidação de PDFs.
 - `netlify/database/migrations/202611130001_portal.sql`: esquema PostgreSQL, regras de negócio, RLS adicional e trilha de eventos. Aplicado automaticamente pelo Netlify em cada deploy.

@@ -1,9 +1,9 @@
-import test from 'node:test';import assert from 'node:assert/strict';import {readFile} from 'node:fs/promises';import {randomBytes,createHash} from 'node:crypto';import {PGlite} from '@electric-sql/pglite';import {PDFDocument} from 'pdf-lib';import {createHandler,CHUNK_SIZE} from '../server/portal-service.mjs';
+import test from 'node:test';import assert from 'node:assert/strict';import {readFile} from 'node:fs/promises';import {randomBytes,createHash} from 'node:crypto';import {PGlite} from '@electric-sql/pglite';import {applySchema} from './schema.mjs';import {PDFDocument} from 'pdf-lib';import {createHandler,CHUNK_SIZE} from '../server/portal-service.mjs';
 const uid=n=>'00000000-0000-4000-8000-'+String(n).padStart(12,'0');
 test('Netlify Functions service: verified identity, CSRF, server-side unit permissions, multipart upload and immutable original download',async()=>{
  const db=new PGlite();
  try{
-  await db.exec(await readFile(new URL('../netlify/database/migrations/202611130001_portal.sql',import.meta.url),'utf8'));
+  await applySchema(db);
   let active=null,passwordUpdates=0;
   const identities=Array.from({length:4},(_,i)=>({id:uid(i+1),email:`test${i}@example.invalid`,name:`Teste ${i}`}));
   const transaction=async(user,task)=>{

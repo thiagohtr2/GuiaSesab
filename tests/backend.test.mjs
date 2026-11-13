@@ -1,11 +1,11 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {readFile} from 'node:fs/promises';
-import {PGlite} from '@electric-sql/pglite';
+import {PGlite} from '@electric-sql/pglite';import {applySchema} from './schema.mjs';
 test('PostgreSQL: lifecycle, role boundaries, unit isolation, immutable originals and stale batches', async()=>{
  const db=new PGlite();
  try {
- await db.exec(await readFile(new URL('../netlify/database/migrations/202611130001_portal.sql',import.meta.url),'utf8'));
+ await applySchema(db);
  await db.exec(`create role gs_visitor; create role gs_restricted;grant usage on schema public to gs_restricted,gs_visitor;
  grant select on public.gs_units,public.gs_profiles,public.gs_requests,public.gs_months,public.gs_guides,public.gs_uploads,public.gs_batches,public.gs_events to gs_restricted;
  grant execute on all functions in schema public to gs_restricted;`);
@@ -33,7 +33,10 @@ test('PostgreSQL: lifecycle, role boundaries, unit isolation, immutable original
  assert.equal((await db.query('select * from public.gs_uploads')).rows.length,1);
  await assert.rejects(db.query('delete from public.gs_uploads returning *'),/permission denied/);
  await actor(3);assert.equal((await db.query('select * from public.gs_uploads')).rows.length,0);assert.equal((await db.query('select * from public.gs_uploads')).rows.length,0);
- assert.equal((await db.query("select * from public.gs_dashboard('2026-11-01')")).rows.length,5);
+ {const board=(await db.query("select * from public.gs_dashboard('2026-11-01')")).rows;
+  assert.equal(board.length,5);
+  const signed=board.find(r=>r.current_upload_id===u.id);assert.equal(signed.guide_pages,2);assert.equal(signed.total_pages,3);assert.equal(typeof signed.crm,'string');assert.ok(signed.member_since,'dashboard exposes registration date to skip months before it');
+  const fallback=board.find(r=>!r.deadline_custom);if(fallback)assert.equal(new Date(fallback.deadline).toISOString().slice(0,10),'2026-11-30','default deadline is the last day of the reference month');}
  await assert.rejects(call('select public.gs_finalize_upload($1)',[u.id]),/indisponível/);
  await actor(4);assert.equal((await db.query('select * from public.gs_guides')).rows.length,0);assert.equal((await db.query('select * from public.gs_uploads')).rows.length,0);
  await assert.rejects(call("select public.gs_set_deadline($1,'2026-11-01','2026-12-03')",[a]),/administração/);
