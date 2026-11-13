@@ -15,13 +15,11 @@ Configuração versionada em `netlify.toml`:
 - conteúdo estático: `dist/`;
 - funções: `netlify/functions/`, com bundler esbuild;
 - API: `/api/*`, atendida por `netlify/functions/api.mjs`;
-- migração: `db/netlify/202611130001_portal.sql`.
+- migração: `netlify/database/migrations/202611130001_portal.sql`, aplicada automaticamente pelo Netlify.
 
-A publicação do frontend e das Functions **não provisiona banco nem executa migrações**. O driver `pg` só abre a conexão quando uma operação autenticada precisa dos dados. As credenciais são lidas exclusivamente no servidor, das variáveis Netlify `NETLIFY_DB_URL` (nativo) ou `NETLIFY_DATABASE_URL` (integração anterior).
+O banco é habilitado manualmente em **Data & Storage > Database** deste projeto (o pacote `@netlify/database` não é usado, então o Netlify não o provisiona sozinho). Com o banco habilitado, o Netlify aplica automaticamente o SQL de `netlify/database/migrations/` em cada deploy, imediatamente antes de publicar; se a migração falhar, o deploy não é publicado e o site anterior continua no ar. O driver `pg` só abre a conexão quando uma operação autenticada precisa dos dados. As credenciais são lidas exclusivamente no servidor, das variáveis Netlify `NETLIFY_DB_URL` (nativo) ou `NETLIFY_DATABASE_URL` (integração anterior).
 
-Quando for ativar o portal, habilite/confira o banco em **Data & Storage > Database** deste projeto e disponibilize a conexão no escopo Functions. Aplique a migração manual com `npm run db:migrate`, executado em um ambiente autorizado que já tenha essa variável configurada. O script executa a migração de forma transacional e registra a versão; não imprime a conexão. Não envie credenciais pelo chat.
-
-O SQL fica em `db/netlify/`, fora do diretório de migrações automáticas da hospedagem. Dessa forma, o gerador e o visual podem ser publicados antes da ativação do portal.
+Contingência: `npm run db:migrate`, executado em ambiente autorizado com a variável de conexão, aplica o mesmo esquema apenas se ele ainda não existir. Não é necessário no fluxo normal. Não envie credenciais pelo chat.
 O script de build copia somente o frontend para `dist/`. As Functions são empacotadas separadamente pelo Netlify. Dependências, SQL, testes e documentação operacional não são publicados como arquivos estáticos.
 
 ## 2. Habilitar Netlify Identity

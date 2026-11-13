@@ -1,7 +1,7 @@
 import test from 'node:test';import assert from 'node:assert/strict';import {readFile,access} from 'node:fs/promises';import {getPool} from '../server/database.mjs';import {createHandler} from '../server/portal-service.mjs';
-test('deployment keeps database activation deferred and frontend/auth entry can run without a database',async()=>{
+test('schema is applied by Netlify migrations on deploy and frontend/auth entry can run without a database',async()=>{
  const pkg=JSON.parse(await readFile(new URL('../package.json',import.meta.url),'utf8'));
- assert.equal(pkg.dependencies['@netlify/database'],undefined);await assert.rejects(access(new URL('../netlify/database/migrations/',import.meta.url)));
+ assert.equal(pkg.dependencies['@netlify/database'],undefined);await access(new URL('../netlify/database/migrations/202611130001_portal.sql',import.meta.url));
  const previous=[process.env.NETLIFY_DB_URL,process.env.NETLIFY_DATABASE_URL];delete process.env.NETLIFY_DB_URL;delete process.env.NETLIFY_DATABASE_URL;
  try{
   assert.throws(getPool,error=>error.code==='DB_NOT_CONFIGURED');

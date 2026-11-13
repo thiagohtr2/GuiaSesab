@@ -1,5 +1,4 @@
--- Netlify Database. Identidade verificada por Netlify Functions; PDFs em Netlify Blobs.
-begin;
+-- Netlify Database. Aplicada automaticamente pelo Netlify no deploy (netlify/database/migrations); a plataforma controla a transação. Identidade verificada por Netlify Functions; PDFs em Netlify Blobs.
 create table public.gs_accounts (
  id uuid primary key, email text not null check(length(email)<=320), created_at timestamptz not null default now()
 );
@@ -250,4 +249,3 @@ do $$ declare f record; begin
  execute format('revoke all on function %s from public',f.sig);
  end loop;
 end $$;
-commit;
