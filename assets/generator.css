@@ -19,3 +19,39 @@
 .gs-shift-button.selected{background:#e4f4eb;color:#146342;border:2px solid #24865d}
 .gs-shift-button:focus-visible,.gs-view-buttons button:focus-visible{outline:3px solid #2b7ec3;outline-offset:2px}
 @media(max-width:420px){.gs-view-buttons{grid-template-columns:1fr}.gs-simple-row{grid-template-columns:65px 1fr 1fr;gap:5px}.gs-shift-button{font-size:13px;padding:8px 3px}}
+
+
+/* Guided one-page interface */
+body.gs-wizard{min-height:100dvh;padding-bottom:18px;background:#f5f8f7}
+.gs-wizard .masthead{display:none}
+.gs-wizard .wrap{max-width:960px}
+.gs-wizard .generator-columns{display:block;max-width:760px;margin:auto}
+.gs-wizard .generator-columns>section:not(.gs-step-current){display:none!important}
+.gs-wizard .generator-columns>section.gs-step-current{display:block!important}
+.gs-wizard-header{max-width:760px;margin:14px auto 16px}
+.gs-wizard-brand{font-size:17px;font-weight:700;color:#184a3e;margin-bottom:12px}
+.gs-wizard-brand span{font-weight:400;color:#60746c}
+.gs-progress{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:5px}
+.gs-progress span{border-radius:7px;background:#e9eeeb;color:#64746e;padding:9px 3px;text-align:center;font-size:11px;font-weight:600}
+.gs-progress span.active{background:#146c58;color:white}
+.gs-progress span.done{background:#dcf0e7;color:#155c43}
+.gs-wizard .sec-head{padding:13px 18px}
+.gs-wizard .sec-body{padding:14px 18px}
+.gs-wizard .generator-data{margin-bottom:10px}
+.gs-wizard .bar{display:none}
+.gs-wizard .bar.gs-bar-visible{display:block;position:static;box-shadow:none;border:1px solid #dfe6eb;border-radius:10px;max-width:760px;margin:8px auto}
+.gs-wizard .bar .wrap{padding:8px 14px}
+.gs-wizard-footer{display:flex;justify-content:space-between;gap:12px;max-width:760px;margin:10px auto}
+.gs-wizard-footer button{min-height:48px;border-radius:9px;font-weight:600}
+.gs-wizard-footer .gs-next,.gs-finish-button{background:#146c58;border-color:#146c58;color:#fff}
+.gs-wizard-footer .gs-next{margin-left:auto;min-width:180px}
+.gs-finish-button{width:100%;margin-top:16px;min-height:52px}
+.gs-wizard .generator-footer{display:none}
+.gs-wizard .gs-simple-days{max-height:none;overflow:visible}
+.gs-week-nav{display:flex;align-items:center;justify-content:space-between;gap:6px;padding:5px 0}
+.gs-week-nav button{min-height:44px;padding:8px 12px}
+.gs-final-options{display:grid;gap:10px;margin-top:14px}
+.gs-final-options>a,.gs-final-options>button{display:block;text-align:left;width:100%;padding:16px;border:1px solid #cbded6;border-radius:11px;background:white;color:#184b3d;font-size:16px;font-weight:700;text-decoration:none}
+.gs-final-options small{display:block;color:#586f65;font-size:13px;line-height:1.5;font-weight:400;margin-top:6px}
+.gs-finish-link{display:block;margin-top:18px;text-align:center;color:#146c58}
+@media(max-width:650px){.gs-wizard .wrap{padding:0 12px}.gs-wizard .sec-body{padding:12px}.gs-wizard .sec-head{padding:11px 12px}.gs-wizard-header{margin:10px auto}.gs-progress span{font-size:10px;padding:8px 2px}.gs-wizard .generator-data .grid2{gap:8px}.gs-wizard .generator-data input{min-height:40px}.gs-wizard .cal{gap:3px}.gs-wizard .day{min-height:38px}.gs-wizard .legend{margin-top:7px}.gs-wizard .semanas{margin-top:9px;padding:8px}}
