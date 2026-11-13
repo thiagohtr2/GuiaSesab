@@ -10,7 +10,7 @@ Credenciamento nº 001/2024 · Portaria nº 921/2024.
 - `portal.html`: entrar/cadastrar/recuperar senha; visão geral da equipe; minha guia; minha conta; administração por papel.
 - `admin.html`: entrada antiga, redireciona à administração do portal.
 - `assets/`: estilos responsivos, cliente da API, integração do gerador e consolidação de PDFs.
-- `netlify/database/migrations/202611130001_portal.sql`: esquema PostgreSQL, regras de negócio, RLS adicional e trilha de eventos.
+- `db/netlify/202611130001_portal.sql`: esquema PostgreSQL, regras de negócio, RLS adicional e trilha de eventos.
 - `netlify/functions/api.mjs` e `server/portal-service.mjs`: API autenticada de dados/arquivos; Netlify Database, Identity e Blobs.
 - `docs/ATIVACAO.md`: implantação, bootstrap seguro do master, limites e homologação.
 
@@ -36,11 +36,11 @@ A API `/api/*` valida a identidade no servidor pelo SDK oficial, checa origem co
 
 A primeira conta master é definida por UUID previamente conferido no Netlify Identity e configurado em `GUIASESAB_MASTER_USER_ID` no escopo Functions. Não existe autopromoção pelo cadastro nem promoção do primeiro usuário. Consulte [o roteiro de ativação](docs/ATIVACAO.md).
 
-A migração está no diretório nativo de migrações do Netlify. Habilite o banco e Identity no projeto correto, configure os e-mails e homologue o deploy antes de liberar para a equipe. O frontend público continua gerando PDFs quando o backend estiver indisponível, com aviso quando o acompanhamento não puder ser registrado.
+A ativação do banco é manual e posterior ao deploy: `npm run db:migrate`, com a conexão Netlify configurada no ambiente. A publicação não provisiona banco nem executa migrações. Habilite o banco e Identity no projeto correto, configure os e-mails e homologue o deploy antes de liberar para a equipe. O frontend público continua gerando PDFs quando o backend estiver indisponível, com aviso quando o acompanhamento não puder ser registrado.
 
 ## Desenvolvimento e publicação
 
-O frontend é HTML/CSS/JavaScript nativo; a única biblioteca de navegador é `pdf-lib` 1.17.1, pelo cdnjs. As Functions usam os SDKs oficiais `@netlify/database`, `@netlify/identity` e `@netlify/blobs`, além de pdf-lib para verificar os anexos. Não há framework nem bundler.
+O frontend é HTML/CSS/JavaScript nativo; a única biblioteca de navegador é `pdf-lib` 1.17.1, pelo cdnjs. As Functions usam os SDKs oficiais `@netlify/identity` e `@netlify/blobs`, com o driver PostgreSQL `pg`, além de pdf-lib para verificar os anexos. Não há framework nem bundler.
 
 ```sh
 npm ci

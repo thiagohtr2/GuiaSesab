@@ -5,7 +5,7 @@ import {PGlite} from '@electric-sql/pglite';
 test('PostgreSQL: lifecycle, role boundaries, unit isolation, immutable originals and stale batches', async()=>{
  const db=new PGlite();
  try {
- await db.exec(await readFile(new URL('../netlify/database/migrations/202611130001_portal.sql',import.meta.url),'utf8'));
+ await db.exec(await readFile(new URL('../db/netlify/202611130001_portal.sql',import.meta.url),'utf8'));
  await db.exec(`create role gs_visitor; create role gs_restricted;grant usage on schema public to gs_restricted,gs_visitor;
  grant select on public.gs_units,public.gs_profiles,public.gs_requests,public.gs_months,public.gs_guides,public.gs_uploads,public.gs_batches,public.gs_events to gs_restricted;
  grant execute on all functions in schema public to gs_restricted;`);

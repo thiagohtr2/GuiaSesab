@@ -1,11 +1,9 @@
 import * as identity from '@netlify/identity';
-import {getDatabase} from '@netlify/database';
+import {getPool} from '../../server/database.mjs';
 import {getStore} from '@netlify/blobs';
 import {createHandler} from '../../server/portal-service.mjs';
-let database;
 async function transaction(user,task){
- database ||= getDatabase();
- const client=await database.pool.connect();
+ const client=await getPool().connect();
  try{
   await client.query('begin');
   // These settings are transaction-local. No caller-supplied user ID/role is trusted.

@@ -119,6 +119,7 @@ export function errorResponse(error){
  if(error.code==='P0001'||error.code==='23514')return Response.json({message:error.code==='P0001'?error.message:'Dados inválidos. Confira os campos.'},{status:400,headers:{'Cache-Control':'no-store'}});
  if(error.name==='MissingIdentityError')return Response.json({message:'O Netlify Identity ainda precisa ser habilitado para este site.'},{status:503,headers:{'Cache-Control':'no-store'}});
  if(error.name==='AuthError')return Response.json({message:error.status===403?'Acesso recusado. Confira a confirmação do e-mail.':'Não foi possível autenticar. Confira seus dados ou solicite um novo link.'},{status:Math.min(Math.max(error.status||400,400),503),headers:{'Cache-Control':'no-store'}});
+ if(error.code==='DB_NOT_CONFIGURED')return Response.json({message:'A ativação do banco do portal ficou para a próxima etapa. O gerador de guias continua disponível.'},{status:503,headers:{'Cache-Control':'no-store'}});
  if(['42P01','42883'].includes(error.code))return Response.json({message:'O banco Netlify ainda precisa receber a migração do portal.'},{status:503,headers:{'Cache-Control':'no-store'}});
  // Do not expose SQL, connection strings, raw upstream responses, email or tokens.
  console.error('GuiaSesab API failure',{code:typeof error.code==='string'?error.code:'UNEXPECTED',type:error.name||'Error'});

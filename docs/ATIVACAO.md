@@ -15,10 +15,13 @@ Configuração versionada em `netlify.toml`:
 - conteúdo estático: `dist/`;
 - funções: `netlify/functions/`, com bundler esbuild;
 - API: `/api/*`, atendida por `netlify/functions/api.mjs`;
-- migração: `netlify/database/migrations/202611130001_portal.sql`.
+- migração: `db/netlify/202611130001_portal.sql`.
 
-O pacote `@netlify/database` está nas dependências de produção. Conforme a documentação do Netlify, essa instalação permite o provisionamento automático e as migrações são aplicadas antes da publicação. Se o banco já foi habilitado em **Data & Storage > Database**, confirme que ele pertence a este projeto. Não crie outro banco sem necessidade.
+A publicação do frontend e das Functions **não provisiona banco nem executa migrações**. O driver `pg` só abre a conexão quando uma operação autenticada precisa dos dados. As credenciais são lidas exclusivamente no servidor, das variáveis Netlify `NETLIFY_DB_URL` (nativo) ou `NETLIFY_DATABASE_URL` (integração anterior).
 
+Quando for ativar o portal, habilite/confira o banco em **Data & Storage > Database** deste projeto e disponibilize a conexão no escopo Functions. Aplique a migração manual com `npm run db:migrate`, executado em um ambiente autorizado que já tenha essa variável configurada. O script executa a migração de forma transacional e registra a versão; não imprime a conexão. Não envie credenciais pelo chat.
+
+O SQL fica em `db/netlify/`, fora do diretório de migrações automáticas da hospedagem. Dessa forma, o gerador e o visual podem ser publicados antes da ativação do portal.
 O script de build copia somente o frontend para `dist/`. As Functions são empacotadas separadamente pelo Netlify. Dependências, SQL, testes e documentação operacional não são publicados como arquivos estáticos.
 
 ## 2. Habilitar Netlify Identity
@@ -107,7 +110,7 @@ Rollback: retorne ao deploy de código anterior. Não apague tabelas ou originai
 ## Referências oficiais
 
 - [Netlify Database](https://docs.netlify.com/build/data-and-storage/netlify-database/)
-- [Migrações](https://docs.netlify.com/build/data-and-storage/netlify-database/migrations/)
+- [Driver PostgreSQL com Netlify Database](https://docs.netlify.com/build/data-and-storage/netlify-database/tooling/)
 - [API de Database e transações](https://docs.netlify.com/build/data-and-storage/netlify-database/api/)
 - [Identity em Functions](https://docs.netlify.com/manage/security/secure-access-to-sites/identity/use-identity-in-functions/)
 - [Configurar Identity](https://docs.netlify.com/manage/security/secure-access-to-sites/identity/get-started/)
